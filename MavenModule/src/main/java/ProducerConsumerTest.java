@@ -1,4 +1,6 @@
-
+/**
+ *
+ */
 public class ProducerConsumerTest {
    public static void main(String[] args) {
       CubbyHole c = new CubbyHole();
@@ -8,6 +10,10 @@ public class ProducerConsumerTest {
       c1.start();
    }
 }
+
+/**
+ *
+ */
 class CubbyHole {
    private int contents;
    //private boolean available = false;
@@ -34,6 +40,10 @@ class CubbyHole {
       notifyAll();
    }
 }
+
+/**
+ *
+ */
 class Consumer extends Thread {
    private CubbyHole cubbyhole;
    private int number;
@@ -50,6 +60,10 @@ class Consumer extends Thread {
       }
    }
 }
+
+/**
+ *
+ */
 class Producer extends Thread {
    private CubbyHole cubbyhole;
    private int number;

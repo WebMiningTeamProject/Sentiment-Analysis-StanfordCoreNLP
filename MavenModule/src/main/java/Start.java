@@ -8,7 +8,12 @@ import java.util.List;
 import org.ini4j.Ini;
 import org.ini4j.InvalidFileFormatException;
 
-
+/**
+ * This class contains the main method which will calculate the sentiment score for each article and write it back
+ * to the database.
+ *
+ * Make sure you have the crawler_config.ini file in place.
+ */
 public class Start {
 
 	public static void main(String[] args) throws SQLException {
@@ -68,7 +73,7 @@ public class Start {
 	}
 	
 	public static DatabaseHandler setUpDatabaseHandler(){
-		File f = new File("src/crawler_config.ini");
+		File f = new File("crawler_config.ini");
 		Ini ini;
 		try {
 			ini = new Ini(f);

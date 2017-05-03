@@ -6,8 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import sentimentanalyser.BOWTExt; 
+import sentimentanalyser.BOWTExt;
 
+/**
+ * This class...
+ */
 public class DatabaseHandler {
 	
 	private String dbName;
@@ -27,7 +30,6 @@ public class DatabaseHandler {
 		this.url = "jdbc:mysql://"+ url;
 		
 		this.connectToDB();
-		
 	}
 	
 	
@@ -182,9 +184,7 @@ public class DatabaseHandler {
 	    return null;
 	}
 	
-	
-	
-	
+
 	
 	/*
 	 * Select database
@@ -206,17 +206,21 @@ public class DatabaseHandler {
 		}
 	    return false;
 	}
-	
-	
-	
-	
 
 
+	/**
+	 *
+	 * @return
+	 */
 	public Connection getConn() {
 		return conn;
 	}
 
 
+	/**
+	 *
+	 * @param conn
+	 */
 	public void setConn(Connection conn) {
 		this.conn = conn;
 	}

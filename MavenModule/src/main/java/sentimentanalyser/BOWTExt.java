@@ -1,7 +1,7 @@
 package sentimentanalyser;
 
 /*
- * This class contains the BOW and Uri for each news article
+ * This class contains the BOW and URI for each news article.
  */
 public class BOWTExt {
 	

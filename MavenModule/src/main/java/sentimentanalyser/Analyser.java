@@ -1,10 +1,7 @@
 package sentimentanalyser;
 
-
-
 import java.util.List;
 import java.util.Properties;
-
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.neural.rnn.RNNCoreAnnotations;
 import edu.stanford.nlp.pipeline.Annotation;
@@ -14,12 +11,12 @@ import edu.stanford.nlp.trees.Tree;
 import edu.stanford.nlp.util.CoreMap;
 
 
-
-
-
-
+/**
+ * This class calculates the sentiment score for each article.
+ */
 public class Analyser {
-	
+
+
 	private StanfordCoreNLP pipeline;
 	private Properties props;
 	
@@ -35,7 +32,11 @@ public class Analyser {
 		System.out.println("Finished Setup"); 
 	}
 
-	
+    /**
+     * Finds the sentiment.
+     * @param bow The string for which the sentiment is to be found.
+     * @return The sentiment score, ranges from XX to YY.
+     */
 	public int findSentiment(String bow){
 		System.out.println("Start finding Sentiment");
 		int mainSentiment = 0;
