@@ -1,7 +1,7 @@
 #Ignore config files
 *.ini 
 #Ignore libraries
-
+*.jar
 
 .metadata
 bin/
