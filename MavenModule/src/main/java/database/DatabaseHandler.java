@@ -21,6 +21,7 @@ public class DatabaseHandler {
 	
 	private final String SQLQuery = "Select * from NewsArticlesBOW";
 	private final String SQLQueryWriteSentiment = "Insert into SentimentCoreNlp (source_uri, sentiment) VALUES";
+	private final String SQLQuerySelectNotProcessed = "Select n.source_uri, n.text from NewsArticles n Left Join SentimentCoreNlp nlp ON nlp.source_uri = n.source_uri Where n.source_uri IS NULL";
 	private final String SQLQuerySelectDB = "Use webmining";
 	
 	public DatabaseHandler(String url, String dbName, String user, String dbPassword) throws SQLException{
@@ -92,14 +93,12 @@ public class DatabaseHandler {
 	
 	
 	
-	public List<BOWTExt> listOfNotProcessedArticles(int limit){
+	public List<BOWTExt> listOfNotProcessedArticles(){
 		/*String query = "Select n.source_uri, n.bow from NewsArticlesBOW as n"
 				+ " Left JOIN SentimentCoreNlp ON  n.source_uri = SentimentCoreNlp.source_uri "
 				+ "WHERE SentimentCoreNlp.source_uri IS NULL LIMIT "+ limit; */
-		String query = "Select n.source_uri, n.bow from NewsArticlesBOW n  WHERE NOT EXISTS  (Select s.source_uri FROM SentimentCoreNlp s WHERE n.source_uri = s.source_uri) LIMIT 100";
-		System.out.println(query);
 		try {
-			return getArticles(query);
+			return getArticles(SQLQuerySelectNotProcessed);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

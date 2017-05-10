@@ -16,63 +16,58 @@ import org.ini4j.InvalidFileFormatException;
  */
 public class Start {
 
+	private  DatabaseHandler handler;
+
+	public Start(){
+		handler = setUpDatabaseHandler();
+	}
+
 	public static void main(String[] args) throws SQLException {
-		
-		
-		 DatabaseHandler handler = setUpDatabaseHandler();
-		 if(handler == null){
-			 System.out.println("Could not setup database handlers");
-			 return;
-		 }
-		List<BOWTExt> articles = handler.listOfNotProcessedArticles(100);	
-		System.out.println("Articles to be processed: "+ articles.size());	
-	
-		
+
+
+		Start s = new Start();
+		Boolean state = s.processArticles();
+
+		if(state = true){
+			System.out.println("Finished!!!!");
+		}else{
+			System.out.println("Something went wrong!!!!");
+		}
+	}
+
+
+
+	/*
+	* Method calculates sentiment for not processed articles
+	* */
+	public Boolean processArticles(){
 		int counter = 0;
 		Analyser an = new Analyser();
-		
+		List<BOWTExt> articles = handler.listOfNotProcessedArticles();
+		System.out.println("Articles to be processed: "+ articles.size());
+
+		if(handler == null){
+			System.out.println("Could not setup database handlers");
+			return false;
+		}
+
 		while(counter < articles.size()){
-			
-			
+
+
 			System.out.println(counter + " "+ articles.get(counter).getBow());
 			int sentiment = an.findSentiment(articles.get(counter).getBow());
 			handler.writeSentiment(articles.get(counter).getUri(), sentiment);
-			
-			counter++;
-			
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			
-			
-			if(counter%10 == 0 && counter != 0){
-				
-				System.out.println("Total Memory (in bytes): " + Runtime.getRuntime().totalMemory());
-				System.out.println("Free Memory (in bytes): " + Runtime.getRuntime().freeMemory());  
-				System.out.println("Max Memory (in bytes): " + Runtime.getRuntime().maxMemory());
-				
-				System.out.println("Run garbage collector");
-				System.gc ();
-				System.runFinalization ();
-				System.out.println("Finished running garbage collector");
-				
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
+
 		}
-		
-		System.out.println("Finished!!!!");
-			
-		
-		
+		return true;
 	}
-	
-	public static DatabaseHandler setUpDatabaseHandler(){
+
+
+
+	/*
+	* Set upd the Database Connection
+	* */
+	public DatabaseHandler setUpDatabaseHandler(){
 		File f = new File("crawler_config.ini");
 		Ini ini;
 		try {
