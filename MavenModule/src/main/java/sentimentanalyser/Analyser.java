@@ -38,18 +38,19 @@ public class Analyser {
      * @return The sentiment score, ranges from XX to YY.
      */
 	public int findSentiment(String bow){
-		System.out.println("Start finding Sentiment");
+
 		int mainSentiment = 0;
-		
 		if(bow == null || bow.length() <= 0){
+			System.out.println("Test lenght is zero");
 			return -500;
 		}
 		
-		if(bow.length() > 3500){
+		if(bow.length() > 500000){
 			System.out.println("Text to big for Core NLP, need to be processed later");
 			return -500;
 		}
-		
+
+		System.out.println("Start finding Sentiment");
 		int longest = 0;
 		System.out.println("---");
 		Annotation annotation = pipeline.process(bow);

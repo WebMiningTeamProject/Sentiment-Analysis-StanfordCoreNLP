@@ -52,12 +52,15 @@ public class Start {
 		}
 
 		while(counter < articles.size()){
-
-
+			
 			System.out.println(counter + " "+ articles.get(counter).getBow());
 			int sentiment = an.findSentiment(articles.get(counter).getBow());
-			handler.writeSentiment(articles.get(counter).getUri(), sentiment);
 
+			System.out.println("Article: "+articles.get(counter).getUri()+"Sentiment: "+ sentiment);
+			if(sentiment != -500){
+				handler.writeSentiment(articles.get(counter).getUri(), sentiment);
+			}
+			counter++;
 		}
 		return true;
 	}

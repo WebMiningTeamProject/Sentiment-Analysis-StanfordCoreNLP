@@ -21,7 +21,7 @@ public class DatabaseHandler {
 	
 	private final String SQLQuery = "Select * from NewsArticlesBOW";
 	private final String SQLQueryWriteSentiment = "Insert into SentimentCoreNlp (source_uri, sentiment) VALUES";
-	private final String SQLQuerySelectNotProcessed = "Select n.source_uri, n.text from NewsArticles n Left Join SentimentCoreNlp nlp ON nlp.source_uri = n.source_uri Where n.source_uri IS NULL";
+	private final String SQLQuerySelectNotProcessed = "Select n.source_uri, n.text from NewsArticles n Left Join SentimentCoreNlp nlp ON nlp.source_uri = n.source_uri Where nlp.source_uri IS NULL";
 	private final String SQLQuerySelectDB = "Use webmining";
 	
 	public DatabaseHandler(String url, String dbName, String user, String dbPassword) throws SQLException{
@@ -132,7 +132,7 @@ public class DatabaseHandler {
 			Map<String, Object> currentEntry = res.get(i);
 			
 			String uri = (String) currentEntry.get("source_uri");
-			String bow = (String) currentEntry.get("bow");
+			String bow = (String) currentEntry.get("text");
 			l.add(new BOWTExt(uri, bow));
 		}
 		
