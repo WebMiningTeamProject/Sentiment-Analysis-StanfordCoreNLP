@@ -54,11 +54,12 @@ public class Start {
 		while(counter < articles.size()){
 			
 			System.out.println(counter + " "+ articles.get(counter).getBow());
-			int sentiment = an.findSentiment(articles.get(counter).getBow());
+			int sentiment = an.findSentimentAverage(articles.get(counter).getBow());
 
-			System.out.println("Article: "+articles.get(counter).getUri()+"Sentiment: "+ sentiment);
+			System.out.println("Sentiment: "+ sentiment);
 			if(sentiment != -500){
-				handler.writeSentiment(articles.get(counter).getUri(), sentiment);
+				//handler.writeSentiment(articles.get(counter).getUri(), sentiment);
+				handler.updateSentiment(articles.get(counter).getUri(), sentiment);
 			}
 			counter++;
 		}

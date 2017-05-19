@@ -20,8 +20,11 @@ public class DatabaseHandler {
 	private Connection conn;
 	
 	private final String SQLQuery = "Select * from NewsArticlesBOW";
-	private final String SQLQueryWriteSentiment = "Insert into SentimentCoreNlp (source_uri, sentiment) VALUES";
-	private final String SQLQuerySelectNotProcessed = "Select n.source_uri, n.text from NewsArticles n Left Join SentimentCoreNlp nlp ON nlp.source_uri = n.source_uri Where nlp.source_uri IS NULL";
+	private final String SQLQueryWriteSentiment = "Insert into SentimentCoreNlp (source_uri, sentimentAvgSentence) VALUES";
+
+	private final String SQLQuerySelectNotProcessed = "Select n.source_uri, n.text from NewsArticles n Left Join SentimentCoreNlp nlp ON nlp.source_uri = n.source_uri Where sentimentAvgSentence IS NULL LIMIT 5000";
+
+	//private final String SQLQuerySelectNotProcessed = "Select n.source_uri, n.text from NewsArticles n Left Join SentimentCoreNlp nlp ON nlp.source_uri = n.source_uri Where nlp.source_uri IS NULL LIMIT 5000";
 	private final String SQLQuerySelectDB = "Use webmining";
 	
 	public DatabaseHandler(String url, String dbName, String user, String dbPassword) throws SQLException{
@@ -66,8 +69,19 @@ public class DatabaseHandler {
 	 * **/
 	public Boolean writeSentiment(String uri, int sentiment){
 		String query = this.SQLQueryWriteSentiment +"('" +uri+"',"+sentiment +");";
-		System.out.println(query);
 		return this.executeInsertSQLStatement(query);
+	}
+
+	/**
+	 * Update
+	 * @param
+	 * @return
+	 */
+	public boolean updateSentiment(String uri, int sentiment){
+		String SQLQueryUpdateSentimentRow = "UPDATE SentimentCoreNlp\n" +
+				"SET sentimentAvgSentence = '"+ sentiment+"'\n" +
+				"WHERE source_uri = '"+uri+"';";
+		return this.executeInsertSQLStatement(SQLQueryUpdateSentimentRow);
 	}
 	
 	private Boolean executeInsertSQLStatement(String query){
@@ -100,7 +114,6 @@ public class DatabaseHandler {
 		try {
 			return getArticles(SQLQuerySelectNotProcessed);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
