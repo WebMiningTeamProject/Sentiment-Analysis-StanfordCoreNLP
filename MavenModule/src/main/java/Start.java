@@ -55,8 +55,9 @@ public class Start {
 
 			System.out.println("Sentiment: "+ sentiment);
 			if(sentiment != -500){
+				handler.writeSentimentAvgSentence(articles.get(counter).getUri(), sentiment);
 				//handler.writeSentiment(articles.get(counter).getUri(), sentiment);
-				handler.updateSentiment(articles.get(counter).getUri(), sentiment);
+				//handler.updateSentiment(articles.get(counter).getUri(), sentiment);
 			}
 			counter++;
 		}

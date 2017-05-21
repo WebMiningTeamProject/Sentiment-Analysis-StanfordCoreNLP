@@ -21,6 +21,7 @@ public class DatabaseHandler {
 	
 	private final String SQLQuery = "Select * from NewsArticles";
 	private final String SQLQueryWriteSentiment = "Insert into SentimentCoreNlp (source_uri, sentiment) VALUES";
+	private final String SQLQueryWriteSentimentAvgSentence = "Insert into SentimentCoreNlp (source_uri, sentimentAvgSentence) VALUES";
 
 	private final String SQLQuerySelectNotProcessed = "Select n.source_uri, n.text from NewsArticles n " +
 			"Left Join SentimentCoreNlp nlp ON nlp.source_uri = n.source_uri" +
@@ -78,11 +79,18 @@ public class DatabaseHandler {
 	/**
 	 * SQL-Query
 	 * **/
+	public Boolean writeSentimentAvgSentence(String uri, int sentiment){
+		String query = this.SQLQueryWriteSentimentAvgSentence +"('" +uri+"',"+sentiment +");";
+		return this.executeInsertSQLStatement(query);
+	}
+
+	/**
+	 * SQL-Query
+	 * **/
 	public Boolean writeSentiment(String uri, int sentiment){
 		String query = this.SQLQueryWriteSentiment +"('" +uri+"',"+sentiment +");";
 		return this.executeInsertSQLStatement(query);
 	}
-
 	/**
 	 * Update AVG Sentiment
 	 * @param
