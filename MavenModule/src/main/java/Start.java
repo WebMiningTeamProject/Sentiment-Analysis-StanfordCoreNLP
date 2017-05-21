@@ -26,8 +26,9 @@ public class Start {
 
 
 		Start s = new Start();
-		Boolean state = s.processArticles();
+		//Boolean state = s.processArticles();
 
+		boolean state = s.processArticlesAvg();
 		if(state = true){
 			System.out.println("Finished!!!!");
 		}else{
@@ -35,6 +36,32 @@ public class Start {
 		}
 	}
 
+
+	public boolean processArticlesAvg(){
+		int counter = 0;
+		Analyser an = new Analyser();
+		List<BOWTExt> articles = handler.notProcessedAvgSentence();
+		System.out.println("Articles to be processed: "+ articles.size());
+
+		if(handler == null){
+			System.out.println("Could not setup database handlers");
+			return false;
+		}
+
+		while(counter < articles.size()){
+
+			System.out.println(counter + " "+ articles.get(counter).getBow());
+			int sentiment = an.findSentimentAverage(articles.get(counter).getBow());
+
+			System.out.println("Sentiment: "+ sentiment);
+			if(sentiment != -500){
+				//handler.writeSentiment(articles.get(counter).getUri(), sentiment);
+				handler.updateSentiment(articles.get(counter).getUri(), sentiment);
+			}
+			counter++;
+		}
+		return true;
+	}
 
 
 	/*
@@ -54,12 +81,13 @@ public class Start {
 		while(counter < articles.size()){
 			
 			System.out.println(counter + " "+ articles.get(counter).getBow());
-			int sentiment = an.findSentimentAverage(articles.get(counter).getBow());
+			//int sentiment = an.findSentimentAverage(articles.get(counter).getBow());
 
+			int sentiment =  an.findSentiment(articles.get(counter).getBow());
 			System.out.println("Sentiment: "+ sentiment);
 			if(sentiment != -500){
-				//handler.writeSentiment(articles.get(counter).getUri(), sentiment);
-				handler.updateSentiment(articles.get(counter).getUri(), sentiment);
+				handler.writeSentiment(articles.get(counter).getUri(), sentiment);
+				//handler.updateSentiment(articles.get(counter).getUri(), sentiment);
 			}
 			counter++;
 		}

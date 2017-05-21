@@ -19,12 +19,23 @@ public class DatabaseHandler {
 	private String url;
 	private Connection conn;
 	
-	private final String SQLQuery = "Select * from NewsArticlesBOW";
-	private final String SQLQueryWriteSentiment = "Insert into SentimentCoreNlp (source_uri, sentimentAvgSentence) VALUES";
+	private final String SQLQuery = "Select * from NewsArticles";
+	private final String SQLQueryWriteSentiment = "Insert into SentimentCoreNlp (source_uri, sentiment) VALUES";
 
-	private final String SQLQuerySelectNotProcessed = "Select n.source_uri, n.text from NewsArticles n Left Join SentimentCoreNlp nlp ON nlp.source_uri = n.source_uri Where sentimentAvgSentence IS NULL LIMIT 5000";
+	private final String SQLQuerySelectNotProcessed = "Select n.source_uri, n.text from NewsArticles n " +
+			"Left Join SentimentCoreNlp nlp ON nlp.source_uri = n.source_uri" +
+			" Where nlp.source_uri IS NULL";
 
-	//private final String SQLQuerySelectNotProcessed = "Select n.source_uri, n.text from NewsArticles n Left Join SentimentCoreNlp nlp ON nlp.source_uri = n.source_uri Where nlp.source_uri IS NULL LIMIT 5000";
+	/*private final String SQLQuerySelectNotProcessedAvg = "Select n.source_uri, n.text from NewsArticles n " +
+			"Left Join SentimentCoreNlp nlp ON nlp.source_uri = n.source_uri" +
+			" Where nlp.source_uri IS NOT NULL And sentimentAvgSentence is NULL";*/
+
+	private final String SQLQuerySelectNotProcessedAvg = "Select n.source_uri, n.text from NewsArticles n " +
+			"Left Join SentimentCoreNlp nlp ON nlp.source_uri = n.source_uri" +
+			" Where nlp.source_uri IS NULL";
+
+
+
 	private final String SQLQuerySelectDB = "Use webmining";
 	
 	public DatabaseHandler(String url, String dbName, String user, String dbPassword) throws SQLException{
@@ -73,11 +84,12 @@ public class DatabaseHandler {
 	}
 
 	/**
-	 * Update
+	 * Update AVG Sentiment
 	 * @param
 	 * @return
 	 */
 	public boolean updateSentiment(String uri, int sentiment){
+		System.out.println(sentiment);
 		String SQLQueryUpdateSentimentRow = "UPDATE SentimentCoreNlp\n" +
 				"SET sentimentAvgSentence = '"+ sentiment+"'\n" +
 				"WHERE source_uri = '"+uri+"';";
@@ -93,7 +105,7 @@ public class DatabaseHandler {
 			stmt.executeUpdate(query);
 			
 			stmt.close();
-			
+			System.out.println("Updated sentiment");
 			return true;
 			
 		} catch (SQLException e) {
@@ -104,36 +116,31 @@ public class DatabaseHandler {
 	}
 	
 	
-	
+
+	public List<BOWTExt> notProcessedAvgSentence(){
+		try {
+			return getArticles(SQLQuerySelectNotProcessedAvg, "source_uri", "text");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 	
 	
 	public List<BOWTExt> listOfNotProcessedArticles(){
-		/*String query = "Select n.source_uri, n.bow from NewsArticlesBOW as n"
-				+ " Left JOIN SentimentCoreNlp ON  n.source_uri = SentimentCoreNlp.source_uri "
-				+ "WHERE SentimentCoreNlp.source_uri IS NULL LIMIT "+ limit; */
 		try {
-			return getArticles(SQLQuerySelectNotProcessed);
+			return getArticles(SQLQuerySelectNotProcessed, "source_uri", "text");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
 	
-	public List<BOWTExt> listOfArticles(){
-		try {
-			return getArticles(SQLQuery);
-		} catch (SQLException e) {
-			
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	
+
 	/*
 	 * Retuns a list of all articles stored at the database
 	 * */
-	private List<BOWTExt> getArticles(String query) throws SQLException{
+	private List<BOWTExt> getArticles(String query, String col1, String col2) throws SQLException{
 		List<BOWTExt> l = new ArrayList<BOWTExt>();
 		List<Map<String, Object>> res = this.executeReadSQLStatement(query);
 		
@@ -144,8 +151,8 @@ public class DatabaseHandler {
 		for(int i= 0; i<res.size(); i++){
 			Map<String, Object> currentEntry = res.get(i);
 			
-			String uri = (String) currentEntry.get("source_uri");
-			String bow = (String) currentEntry.get("text");
+			String uri = (String) currentEntry.get(col1);
+			String bow = (String) currentEntry.get(col2);
 			l.add(new BOWTExt(uri, bow));
 		}
 		
