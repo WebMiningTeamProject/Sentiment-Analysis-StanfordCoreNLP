@@ -27,7 +27,6 @@ public class DatabaseHandler {
 			"Left Join SentimentCoreNlp nlp ON nlp.source_uri = n.source_uri" +
 			" Where nlp.source_uri IS NULL";
 
-
 	/*private final String SQLQuerySelectNotProcessedAvg = "Select n.source_uri, n.text from NewsArticles n " +
 			"Left Join SentimentCoreNlp nlp ON nlp.source_uri = n.source_uri" +
 			" Where nlp.source_uri IS NOT NULL And sentimentAvgSentence is NULL";*/
@@ -81,7 +80,7 @@ public class DatabaseHandler {
 	 * SQL-Query
 	 * **/
 	public Boolean writeSentimentAvgSentence(String uri, int sentiment){
-		String query = this.SQLQueryWriteSentimentAvgSentence +"('" +uri+"',"+sentiment +");";
+		String query = this.SQLQueryWriteSentimentAvgSentence +"('" +uri.replace("'", "\\'")+"',"+sentiment +");";
 		return this.executeInsertSQLStatement(query);
 	}
 
@@ -101,7 +100,7 @@ public class DatabaseHandler {
 		System.out.println(sentiment);
 		String SQLQueryUpdateSentimentRow = "UPDATE SentimentCoreNlp\n" +
 				"SET senAvgSentence2 = '"+ sentiment+"'\n" +
-				"WHERE source_uri = '"+uri+"';";
+				"WHERE source_uri = '"+uri.replace("'", "\\'")+"';";
 		return this.executeInsertSQLStatement(SQLQueryUpdateSentimentRow);
 	}
 	

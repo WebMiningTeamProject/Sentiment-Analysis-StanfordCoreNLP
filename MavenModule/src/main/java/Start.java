@@ -51,21 +51,18 @@ public class Start {
 		while(counter < articles.size()){
 
 			System.out.println(counter + " "+ articles.get(counter).getBow());
+			try {
+				int sentiment = an.findSentimentAverage(articles.get(counter).getBow());
 
-
-			if(articles.get(counter).getBow().length() > 20000){
-				counter++;
-				continue;
+				System.out.println("Sentiment: " + sentiment);
+				if (sentiment != -500) {
+					handler.updateSentiment(articles.get(counter).getUri(), sentiment);
+					//handler.writeSentiment(articles.get(counter).getUri(), sentiment);
+					//handler.updateSentiment(articles.get(counter).getUri(), sentiment);
+				}
 			}
-
-			int sentiment = an.findSentimentAverage(articles.get(counter).getBow());
-
-			System.out.println("Sentiment: "+ sentiment);
-			if(sentiment != -500){
-				//handler.writeSentimentAvgSentence(articles.get(counter).getUri(), sentiment);
-
-				//handler.writeSentiment(articles.get(counter).getUri(), sentiment);
-				handler.updateSentiment(articles.get(counter).getUri(), sentiment);
+			catch (OutOfMemoryError e) {
+				e.printStackTrace();
 			}
 			counter++;
 		}
