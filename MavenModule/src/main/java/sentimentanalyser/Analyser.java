@@ -103,7 +103,7 @@ public class Analyser {
 
 		List<CoreMap> sentences = annotation.get(CoreAnnotations.SentencesAnnotation.class);
 
-		int senCounter = 1;
+		int senCounter = 0;
 		for (CoreMap sentence : sentences) {
 			Tree tree = sentence.get(SentimentCoreAnnotations.SentimentAnnotatedTree.class);
 			int sentiment = RNNCoreAnnotations.getPredictedClass(tree);

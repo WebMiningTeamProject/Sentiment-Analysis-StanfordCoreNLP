@@ -27,13 +27,14 @@ public class DatabaseHandler {
 			"Left Join SentimentCoreNlp nlp ON nlp.source_uri = n.source_uri" +
 			" Where nlp.source_uri IS NULL";
 
+
 	/*private final String SQLQuerySelectNotProcessedAvg = "Select n.source_uri, n.text from NewsArticles n " +
 			"Left Join SentimentCoreNlp nlp ON nlp.source_uri = n.source_uri" +
 			" Where nlp.source_uri IS NOT NULL And sentimentAvgSentence is NULL";*/
 
 	private final String SQLQuerySelectNotProcessedAvg = "Select n.source_uri, n.text from NewsArticles n " +
 			"Left Join SentimentCoreNlp nlp ON nlp.source_uri = n.source_uri" +
-			" Where nlp.source_uri IS NULL";
+			" Where senAvgSentence2 is null and lineID > 10000";
 
 
 
@@ -99,7 +100,7 @@ public class DatabaseHandler {
 	public boolean updateSentiment(String uri, int sentiment){
 		System.out.println(sentiment);
 		String SQLQueryUpdateSentimentRow = "UPDATE SentimentCoreNlp\n" +
-				"SET sentimentAvgSentence = '"+ sentiment+"'\n" +
+				"SET senAvgSentence2 = '"+ sentiment+"'\n" +
 				"WHERE source_uri = '"+uri+"';";
 		return this.executeInsertSQLStatement(SQLQueryUpdateSentimentRow);
 	}
