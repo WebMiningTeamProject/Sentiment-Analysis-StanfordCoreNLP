@@ -34,7 +34,7 @@ public class DatabaseHandler {
 
 	private final String SQLQuerySelectNotProcessedAvg = "Select n.source_uri, n.text from NewsArticles n " +
 			"Left Join SentimentCoreNlp nlp ON nlp.source_uri = n.source_uri" +
-			" Where senAvgSentence2 is null and lineID > 10000";
+			" Where senAvgSentence2 is null and lineID > 10000 ";
 
 
 
